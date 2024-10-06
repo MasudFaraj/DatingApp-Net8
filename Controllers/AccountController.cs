@@ -31,14 +31,13 @@ namespace API.Controllers
             context.Users.Add(user);  /////
             await context.SaveChangesAsync();
 
-            return new UserDto
-            {
+            return new UserDto {
                 Name = user.Name,
                 Token = tokenService.CreateToken(user)
             };
         }
 
-        [HttpPost("login")]
+        [HttpPost("login")]  //wawa
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto){  // to Async belongs await
             var user = await context.Users.FirstOrDefaultAsync(x => x.Name.ToLower() == loginDto.Name.ToLower());
             if (user == null) return Unauthorized("Invalid username");

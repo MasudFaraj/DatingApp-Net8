@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Angular.Material" Version="1.1.12" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.25.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">

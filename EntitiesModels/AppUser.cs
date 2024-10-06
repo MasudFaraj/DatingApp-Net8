@@ -1,4 +1,6 @@
-﻿namespace API.EntitiesModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace API.EntitiesModels
 {
     public class AppUser
     {
