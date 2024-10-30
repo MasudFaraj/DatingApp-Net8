@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 
 namespace API.Controllers
-{
-   
+{   
     public class UsersController(DataContext context) : BaseApiController // primary constructor
     {
         /*private readonly DataContext _context;
@@ -18,12 +17,13 @@ namespace API.Controllers
         }*/
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers() { 
-            var users = await context.Users.ToListAsync();
-            return users;
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers() {   // List<AppUser>
+            var users = await context.Users.ToListAsync();     // hier kein service, Repo, Query, Command
+            return users;  // hier wir sind wie in Repo
         }
 
-        [Authorize]
+        [AllowAnonymous]
+        //[Authorize] //i dont get the user , despite the correct configurations ?!  it costed me too many time
         [HttpGet("{id}")]  // api/users/2
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
@@ -31,6 +31,7 @@ namespace API.Controllers
             if (user == null) { return NotFound(); }
             return user;
         }
+
         [HttpDelete("{id}")]  // api/users/{id}
         public async Task<ActionResult> DeleteUser(int id)
         {

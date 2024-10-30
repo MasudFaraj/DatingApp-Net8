@@ -24,7 +24,7 @@ namespace API.Controllers
             using var hmac = new HMACSHA512();
             var user = new AppUser  ///
             {
-                Name = registerDto.Name,
+                Name = registerDto.Name.ToLower(),
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),  // for Encoding use system.text
                 PasswordSalt = hmac.Key
             };
@@ -33,21 +33,26 @@ namespace API.Controllers
 
             return new UserDto {
                 Name = user.Name,
-                Token = tokenService.CreateToken(user)
+                Token = tokenService.CreateToken(user)  ////
             };
         }
 
         [HttpPost("login")]  //wawa
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto){  // to Async belongs await
+            // context.Users.FindAsync(id/PK)
             var user = await context.Users.FirstOrDefaultAsync(x => x.Name.ToLower() == loginDto.Name.ToLower());
+            //var user = await context.Users.SingleOrDefaultAsync(x => x.Name.ToLower() == loginDto.Name.ToLower());
+
             if (user == null) return Unauthorized("Invalid username");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);    // in that way, when we compute the passwordhash, is going to have the same pw in DB
             
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
             for (int i=0; i<computedHash.Length; i++ ){
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("invalid password");
             }
+
             return new UserDto{
                 Name=user.Name,
                 Token= tokenService.CreateToken(user)
